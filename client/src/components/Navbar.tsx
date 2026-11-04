@@ -32,7 +32,7 @@ export default function Navbar() {
         className="text-2xl font-bold tracking-tight text-stone-800"
         onClick={() => setIsMobileMenuOpen(false)}
       >
-        Cash <span className="text-red-700">Flow</span>
+        Cash<span className="text-red-700">Flow</span>
       </Link>
 
       {isLoggedIn ? (
