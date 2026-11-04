@@ -3,7 +3,10 @@ import { Eye, EyeOff, LockKeyhole, ShieldCheck, Wallet } from "lucide-react";
 import { useNavigate } from "react-router";
 
 export default function ResetPassword() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+  
   const [form, setForm] = useState({
     otp: "",
     password: "",
@@ -13,8 +16,6 @@ export default function ResetPassword() {
     otp: "",
     password: "",
   });
-
-  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -56,7 +57,7 @@ export default function ResetPassword() {
     if (!checkFormValidation()) {
       return;
     }
-  navigate("/")
+    navigate("/");
   };
 
   return (

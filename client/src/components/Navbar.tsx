@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 export default function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
   const [appLoading, setAppLoading] = useState<boolean>(false);
 
   const [search, setSearch] = useState<string>("");

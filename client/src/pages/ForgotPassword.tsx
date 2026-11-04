@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { ArrowLeft, ArrowRight, Mail, ShieldCheck, Wallet } from "lucide-react";
 
@@ -10,7 +10,8 @@ export default function ForgotPassword() {
   const [formError, setFormError] = useState({
     email: "",
   });
-  const [sendingOtp, setSendingotp] = useState(false);
+
+  const [sendingOtp, setSendingOtp] = useState(false);
 
   const [isOtpSent, setIsOtpSent] = useState(false);
 
@@ -29,17 +30,16 @@ export default function ForgotPassword() {
 
   const navigate = useNavigate();
 
-  const handleEmailSubmit = () => {
+  const handleOtpSending = () => {
     if (!checkFormValidation()) {
       return;
     }
     setCountdown(60);
-    setSendingotp(true);
+    setSendingOtp(true);
     setIsOtpSent(true);
   };
 
   const checkFormValidation = () => {
-    console.log("ishan");
     const email = form.email.trim();
     const error = {
       email: "",
@@ -59,6 +59,14 @@ export default function ForgotPassword() {
     return !error.email;
   };
 
+
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+     if (!isOtpSent) return;
+    e.preventDefault();
+    navigate("/reset-password");
+  };
+
+
   useEffect(() => {
     if (!sendingOtp) {
       return;
@@ -67,7 +75,7 @@ export default function ForgotPassword() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          setSendingotp(false);
+          setSendingOtp(false);
           return 60;
         }
         return prev - 1;
@@ -75,10 +83,10 @@ export default function ForgotPassword() {
     }, 1000);
     return () => clearInterval(timer);
   }, [sendingOtp]);
+
   return (
     <main className="min-h-[calc(100vh-72px)] bg-stone-50">
       <div className="mx-auto grid min-h-[calc(100vh-72px)] max-w-300 items-center gap-10 px-4 sm:px-8 py-12 md:grid-cols-2 ">
-        {/* Left */}
         <div className="w-full max-w-md mx-auto">
           <div className="rounded-3xl border border-stone-200 bg-white p-7 shadow-sm md:p-9">
             <h2 className="text-2xl font-bold text-stone-800">
@@ -90,7 +98,7 @@ export default function ForgotPassword() {
               password.
             </p>
 
-            <div className="mt-8">
+            <form onSubmit={handleFormSubmit} className="mt-8">
               <label
                 htmlFor="email"
                 className="mb-2 block text-sm font-semibold text-stone-700"
@@ -126,7 +134,7 @@ export default function ForgotPassword() {
               <button
                 type="button"
                 disabled={sendingOtp}
-                onClick={handleEmailSubmit}
+                onClick={handleOtpSending}
                 className="mt-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 py-3.5 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {sendingOtp ? `Resend OTP in ${countdown}s` : "Send OTP"}
@@ -135,16 +143,12 @@ export default function ForgotPassword() {
               <button
                 disabled={!isOtpSent}
                 type="submit"
-                className="mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-red-700 py-3.5 text-sm font-semibold text-white transition hover:bg-red-600"
-                onClick={() => {
-                  if (!isOtpSent) return;
-                  navigate("/reset-password");
-                }}
+                className="mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-red-700 py-3.5 text-sm font-semibold text-white transition hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Continue
                 <ArrowRight size={17} />
               </button>
-            </div>
+            </form>
 
             <Link
               to="/login"
@@ -156,7 +160,6 @@ export default function ForgotPassword() {
           </div>
         </div>
 
-        {/* Right */}
         <div className="hidden md:block ">
           <div className="max-w-md">
             <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-700">
