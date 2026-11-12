@@ -1,3 +1,4 @@
+"use client"
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Eye, EyeOff, ArrowRight, Wallet } from "lucide-react";
 import Link from "next/link";
